@@ -11,16 +11,16 @@ El gráfico de bigotes ofrece una vista comparativa de cómo varían las puntuac
 
 ### Interactividad
 La visualización va más allá de un gráfico estático y permite una exploración más profunda de los datos:
-1.	Tooltips Estadísticos: Al pasar el cursor sobre cualquier caja, se muestran detalles estadísticos clave como la mediana, los cuartiles, y los valores máximo y mínimo.
-2.	Detalles por Caso: Al hacer clic en una caja de bigotes, se abre una ventana emergente que muestra una lista de los casos específicos que reportaron las puntuaciones más altas y más bajas para ese factor en particular. El encabezado de la ventana también muestra el nombre completo del factor de gobernanza para un mejor contexto.
+1.	Tooltips Estadísticos: al pasar el cursor sobre cualquier caja, se muestran detalles estadísticos clave como la mediana, los cuartiles, y los valores máximo y mínimo.
+2.	Detalles por Caso: al hacer clic en una caja de bigotes, se abre una ventana emergente que muestra una lista de los casos específicos que reportaron las puntuaciones más altas y más bajas para ese factor en particular. El encabezado de la ventana también muestra el nombre completo del factor de gobernanza para un mejor contexto.
 ### Fuente de los Datos
-- Los datos utilizados en esta visualización provienen del proyecto GoGreen y están disponibles públicamente. La información detallada y las publicaciones relacionadas se pueden encontrar en el sitio oficial del proyect.
+- Los datos utilizados en esta visualización provienen del proyecto GoGreen y están disponibles públicamente. La información detallada y las publicaciones relacionadas se pueden encontrar en el sitio oficial del proyecto.
 
-GOGREEN. (2023). *Research protocol for the governing green transitions (GOGREEN)*. Research project (2022-2026). 
+- GOGREEN. (2023). *Research protocol for the governing green transitions (GOGREEN)*. Research project (2022-2026). 
 GoGreen Project Publications.
-GOGREEN. *Governing Green Transitions*: About Publications. Consultael 08/02/2025 from https://gogreen-project.com/publications/
+- GOGREEN. *Governing Green Transitions*: About Publications. Consultael 08/02/2025 from https://gogreen-project.com/publications/
 
-`Procesamiento y Diseño.`
+### Procesamiento y Diseño
 El procesamiento de los datos, así como el diseño y la implementación de esta visualización interactiva, fueron realizados por:
 * Prof. Carlos A Navarrete Ulloa
 * ORCID: https://orcid.org/0000-0001-5528-0562
@@ -28,7 +28,7 @@ El procesamiento de los datos, así como el diseño y la implementación de esta
 
 # **C1. Condiciones de Contexto y Coordinación**
 
-El *Layer C1* agrupa los **factores estructurales, estratégicos y táctico-operativos** que configuran el **contexto de acción colectiva** en el cual emergen, se sostienen y evolucionan los procesos de gobernanza colaborativa para las transiciones verdes.
+El **Layer C1** agrupa los **factores estructurales, estratégicos y táctico-operativos** que configuran el **contexto de acción colectiva** en el cual emergen, se sostienen y evolucionan los procesos de gobernanza colaborativa para las transiciones verdes.
 Este layer no mide la colaboración en sí misma, sino las **condiciones que la posibilitan o limitan**, incluyendo la base ecológica, las reglas institucionales, los marcos discursivos estratégicos y los mecanismos de interdependencia operativa.
 
 
@@ -36,9 +36,9 @@ Este layer no mide la colaboración en sí misma, sino las **condiciones que la 
 
 | Subnivel                 | Tipo de Condición                                       | Enfoque Analítico                       | Factores (GF) | Descripción sintética                                                                                                                                                                                                                                        |
 | ------------------------ | ------------------------------------------------------- | --------------------------------------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **C1-Estructural**       | **Condiciones estructurales del entorno**               | **Bases materiales e institucionales**  | GF01, GF04    | Evalúa las **estructuras ecológicas** (biosfera) y los **canales institucionales** que definen los márgenes de acción. Determina cómo la **realidad ambiental** y las **reglas de participación** enmarcan la posibilidad de iniciar procesos colaborativos. |
-| **C1-Estratégico**       | **Condiciones estratégicas de sentido y movilización**  | **Traducción y construcción narrativa** | GF06, GF07    | Analiza cómo los actores **interpretan y resignifican los ODS verdes**, generando **narrativas** y **traducciones estratégicas** que legitiman y orientan la colaboración hacia fines compartidos.                                                           |
-| **C1-Táctico-Operativo** | **Condiciones relacionales y de coordinación práctica** | **Interdependencia y visión conjunta**  | GF12          | Examina los procesos mediante los cuales los actores **reconocen su interdependencia** y **coordinan acciones** concretas para la resolución de problemas. Constituye el vínculo entre la estrategia y la acción colectiva efectiva.                         |
+| **Estructural**       | **Condiciones estructurales del entorno**               | **Bases materiales e institucionales**  | GF01, GF04    | Evalúa las **estructuras ecológicas** (biosfera) y los **canales institucionales** que definen los márgenes de acción. Determina cómo la **realidad ambiental** y las **reglas de participación** enmarcan la posibilidad de iniciar procesos colaborativos. |
+| **Estratégico**       | **Condiciones estratégicas de sentido y movilización**  | **Traducción y construcción narrativa** | GF06, GF07    | Analiza cómo los actores **interpretan y resignifican los ODS verdes**, generando **narrativas** y **traducciones estratégicas** que legitiman y orientan la colaboración hacia fines compartidos.                                                           |
+| **Táctico-Operativo** | **Condiciones relacionales y de coordinación práctica** | **Interdependencia y visión conjunta**  | GF12          | Examina los procesos mediante los cuales los actores **reconocen su interdependencia** y **coordinan acciones** concretas para la resolución de problemas. Constituye el vínculo entre la estrategia y la acción colectiva efectiva.                         |
 
 ---
 
@@ -46,9 +46,9 @@ Este layer no mide la colaboración en sí misma, sino las **condiciones que la 
 
 | Escala                | Foco analítico                           | Naturaleza de las relaciones                                                                     | Función dentro de la gobernanza colaborativa                             |
 | --------------------- | ---------------------------------------- | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------ |
-| **Estructural**       | Contexto biofísico e institucional       | Configura **condiciones objetivas** del entorno y **reglas formales** de interacción             | Define **los límites y oportunidades del campo de acción**               |
-| **Estratégico**       | Traducción discursiva y legitimación     | Media entre lo estructural y lo operativo mediante **sentido compartido y motivación colectiva** | Orienta **el propósito, la identidad y la dirección de la colaboración** |
-| **Táctico-Operativo** | Coordinación práctica e interdependencia | Articula **relaciones entre actores** y **mecanismos de ejecución conjunta**                     | Viabiliza **la cooperación efectiva en torno a un problema común**       |
+| **Estructural**       | Contexto biofísico e institucional       | Configura **condiciones objetivas** del entorno y **reglas formales** de interacción             | Define **los límites y oportunidades** del campo de acción               |
+| **Estratégico**       | Traducción discursiva y legitimación     | Media entre lo estructural y lo operativo mediante **sentido compartido y motivación colectiva** | Orienta **el propósito, la identidad y la dirección** de la colaboración |
+| **Táctico-Operativo** | Coordinación práctica e interdependencia | Articula **relaciones entre actores** y **mecanismos de ejecución conjunta**                     | Viabiliza **la cooperación efectiva** en torno a un problema común       |
 
 ---
 
@@ -65,19 +65,19 @@ En conjunto, este layer captura **el grado de alineación entre las condiciones 
 ---
 ------------
                   
-# **Layer C2. Institucionalización y Apalancamiento Multinivel**
+# Layer C2. Institucionalización y Apalancamiento Multinivel
 
 El **Layer C2** agrupa los **factores institucionales y de recursos** que estructuran la **capacidad de acción multinivel** de los procesos de gobernanza colaborativa. Este nivel refleja cómo las **reglas formales, paradigmas de gestión pública, mecanismos de rendición de cuentas y sistemas de apoyo financiero e intergubernamental** configuran el entorno de gobernanza donde se insertan los proyectos de transición verde.
 
-Mientras el *Layer C1* aborda las condiciones de contexto y coordinación, el *Layer C2* examina la **densidad institucional** que determina hasta qué punto la colaboración puede **institucionalizarse, financiarse y sostenerse** en el tiempo mediante la interacción entre **estructuras legales, programas nacionales e internacionales, y marcos de apoyo político-administrativo**.
+Mientras el **Layer C1** aborda las condiciones de contexto y coordinación, el **Layer C2** examina la **densidad institucional** que determina hasta qué punto la colaboración puede **institucionalizarse, financiarse y sostenerse** en el tiempo mediante la interacción entre **estructuras legales, programas nacionales e internacionales, y marcos de apoyo político-administrativo**.
 
 
 ## 🧩 Subniveles dentro del layer C2
 
 | Subnivel           | Tipo de Condición                              | Enfoque Analítico                                                                    | Factores (GF)    | Descripción sintética                                                                                                                                                                                                                                                                                                                                         |
 | ------------------ | ---------------------------------------------- | ------------------------------------------------------------------------------------ | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **C2-Estructural** | **Condiciones institucionales del entorno**    | **Marcos normativos, paradigmas de gobernanza y mecanismos de rendición de cuentas** | GF02, GF03, GF05 | Examina cómo las **leyes, políticas y programas nacionales o internacionales** influyen en la acción local; cómo los **paradigmas de gobernanza pública** permiten o bloquean la innovación colaborativa; y cómo los **mecanismos de rendición de cuentas** equilibran la responsabilidad vertical hacia las autoridades y la horizontal hacia la ciudadanía. |
-| **C2-Estratégico** | **Condiciones estratégicas de apalancamiento** | **Recursos financieros y relaciones intergubernamentales**                           | GF09, GF10       | Evalúa la capacidad de los proyectos para **movilizar financiamiento combinado** y **articular apoyo entre niveles de gobierno**, identificando hasta qué punto estos recursos y relaciones funcionan como **palancas estratégicas** para la sostenibilidad de la colaboración.                                                                               |
+| **Estructural** | **Condiciones institucionales del entorno**    | **Marcos normativos, paradigmas de gobernanza y mecanismos de rendición de cuentas** | GF02, GF03, GF05 | Examina cómo las **leyes, políticas y programas nacionales o internacionales** influyen en la acción local; cómo los **paradigmas de gobernanza pública** permiten o bloquean la innovación colaborativa; y cómo los **mecanismos de rendición de cuentas** equilibran la responsabilidad vertical hacia las autoridades y la horizontal hacia la ciudadanía. |
+| **Estratégico** | **Condiciones estratégicas de apalancamiento** | **Recursos financieros y relaciones intergubernamentales**                           | GF09, GF10       | Evalúa la capacidad de los proyectos para **movilizar financiamiento combinado** y **articular apoyo entre niveles de gobierno**, identificando hasta qué punto estos recursos y relaciones funcionan como **palancas estratégicas** para la sostenibilidad de la colaboración.                                                                               |
 
 ---
 
@@ -92,7 +92,7 @@ Mientras el *Layer C1* aborda las condiciones de contexto y coordinación, el *L
 
 ## 💬 Síntesis conceptual
 
-El **Layer C2** representa el **núcleo institucional de la gobernanza colaborativa**. Su estudio permite comprender hasta qué punto los procesos colaborativos pueden **trascender la voluntad local** para insertarse en **estructuras de soporte político, normativo y financiero**.
+El Layer C2 representa el **núcleo institucional de la gobernanza colaborativa**. Su estudio permite comprender hasta qué punto los procesos colaborativos pueden **trascender la voluntad local** para insertarse en **estructuras de soporte político, normativo y financiero**.
 
 Sus condiciones se manifiestan en tres planos interrelacionados:
 
@@ -100,9 +100,9 @@ Sus condiciones se manifiestan en tres planos interrelacionados:
 2. **Paradigmático:** refleja el grado de **apertura institucional** a la experimentación, la descentralización y la innovación en la gestión pública.
 3. **Estratégico:** captura la capacidad de **apalancar recursos financieros e institucionales** mediante la cooperación vertical y horizontal entre niveles de gobierno.
 
-El layer C2, por tanto, no mide la colaboración en sí misma, sino la **capacidad de enraizamiento y sostenimiento institucional** de los procesos colaborativos. Constituye el **nivel intermedio** entre las condiciones contextuales (C1) y los mecanismos de coordinación interactoral (C3), funcionando como un **sistema de soporte estructural y estratégico** para la gobernanza colaborativa en transiciones verdes.
+Por tanto, el Layer C2, no mide la colaboración en sí misma, sino la **capacidad de enraizamiento y sostenimiento institucional** de los procesos colaborativos. Constituye el **nivel intermedio** entre las condiciones contextuales (C1) y los mecanismos de coordinación interactoral (C3), funcionando como un **sistema de soporte estructural y estratégico** para la gobernanza colaborativa en transiciones verdes.
 
-## *Layer* C3. Colaboración, Confianza y Aprendizaje Adaptativo
+## Layer C3. Colaboración, Confianza y Aprendizaje Adaptativo
 
 El **Layer C3** constituye el **nivel dinámico y relacional** de la gobernanza colaborativa. A diferencia de los layers anteriores, que se enfocan en las condiciones contextuales (C1) e institucionales (C2), este layer analiza **cómo la colaboración ocurre en la práctica**, a través de **interacciones entre actores, mediación de conflictos, aprendizaje reflexivo, liderazgo facilitador e innovación experimental**.
 
@@ -116,8 +116,8 @@ El C3 es, por tanto, el layer que **vincula la estructura con la práctica**, do
 
 | Subnivel                 | Tipo de Condición                                                  | Enfoque Analítico                                                     | Factores (GF)                | Descripción sintética                                                                                                                                                                                                                                                                                                                                                                                                              |
 | ------------------------ | ------------------------------------------------------------------ | --------------------------------------------------------------------- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **C3-Estratégico**       | **Condiciones de articulación institucional para la colaboración** | **Estructuras y espacios que facilitan la interacción entre actores** | GF08                         | Evalúa la existencia y calidad de **plataformas y espacios institucionales** que facilitan la colaboración. Estas plataformas —digitales, organizativas o físicas— proporcionan **infraestructura y soporte** para la comunicación, coordinación y acción conjunta, funcionando como nodos estables de interacción.                                                                                                                |
-| **C3-Táctico-Operativo** | **Condiciones relacionales y de aprendizaje colectivo**            | **Inclusión, confianza, liderazgo e innovación adaptativa**           | GF11, GF13, GF14, GF15, GF16 | Examina los procesos **microinstitucionales** y **socio-relacionales** que sostienen la colaboración efectiva: inclusión y empoderamiento de actores relevantes y afectados; construcción de confianza interpersonal e institucional; uso de herramientas experimentales de innovación (diseño centrado en el usuario y prototipos); aprendizaje reflexivo continuo; y liderazgo facilitador que orienta el proceso sin imponerlo. |
+| **Estratégico**       | Condiciones de articulación institucional para la colaboración | **Estructuras y espacios que facilitan la interacción entre actores** | GF08                         | Evalúa la existencia y calidad de **plataformas y espacios institucionales** que facilitan la colaboración. Estas plataformas —digitales, organizativas o físicas— proporcionan **infraestructura y soporte** para la comunicación, coordinación y acción conjunta, funcionando como nodos estables de interacción.                                                                                                                |
+| **Táctico-Operativo** | Condiciones relacionales y de aprendizaje colectivo            | **Inclusión, confianza, liderazgo e innovación adaptativa**           | GF11, GF13, GF14, GF15, GF16 | Examina los procesos **microinstitucionales** y **socio-relacionales** que sostienen la colaboración efectiva: inclusión y empoderamiento de actores relevantes y afectados; construcción de confianza interpersonal e institucional; uso de herramientas experimentales de innovación (diseño centrado en el usuario y prototipos); aprendizaje reflexivo continuo; y liderazgo facilitador que orienta el proceso sin imponerlo. |
 
 ---
 
