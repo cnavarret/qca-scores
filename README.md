@@ -82,7 +82,7 @@ Mientras el *Layer C1* aborda las condiciones de contexto y coordinación, el *L
 
 ---
 
-## 🧠 Interpretación analítica según escala
+## Interpretación analítica según escala
 
 | Escala          | Foco analítico                                      | Naturaleza de las relaciones                                                                                           | Función dentro de la gobernanza colaborativa                                                                     |
 | --------------- | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
