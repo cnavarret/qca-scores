@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Distribución de QCA Scores por Factor de Gobernanza</title>
+    <!-- Tailwind CSS para estilos -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Plotly.js para el gráfico (versión actualizada) -->
+    <script src="https://cdn.plot.ly/plotly-2.32.0.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Estilos para el modal */
+        .modal-backdrop {
+            transition: opacity 0.3s ease;
+        }
+        .modal-content {
+            transition: transform 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container mx-auto px-4 py-8">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">Distribución de QCA Scores por Factor de Gobernanza (GF)</h1>
+            <p class="mt-2 text-lg text-gray-600">
+                Haz clic en una caja para ver los casos con los scores máximo y mínimo.
+            </p>
+        </header>
+
+        <!-- Contenedor para el gráfico -->
+        <div id="boxplot" class="w-full h-[70vh] bg-white rounded-lg shadow-md p-4"></div>
+
+        <div class="mt-8 text-center text-gray-500 text-sm">
+            <!-- cspell:disable-next-line -->
+            <p>Fuente: https://gogreen-project.com/publications/ Elaborado por Prof. Carlos A Navarrete Ulloa.</p>
+        </div>
+    </div>
+
+    <!-- Modal para mostrar detalles de los casos -->
+    <div id="caseModal" class="fixed inset-0 z-50 hidden items-center justify-center">
+        <!-- Fondo oscuro -->
+        <div id="modalBackdrop" class="absolute inset-0 bg-black bg-opacity-50 modal-backdrop"></div>
+        
+        <!-- Contenido del modal -->
+        <div class="relative bg-white rounded-lg shadow-xl w-11/12 max-w-2xl m-4 modal-content transform scale-95">
+            <div class="flex justify-between items-center p-4 border-b">
+                <h3 id="modalTitle" class="text-xl font-semibold text-gray-800">Detalles del Caso</h3>
+                <button id="closeModal" class="text-gray-400 hover:text-gray-600">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            <div class="p-6 max-h-[60vh] overflow-y-auto">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                        <h4 id="maxScoreTitle" class="text-lg font-semibold text-green-600 mb-2">Casos con Score Máximo</h4>
+                        <ul id="maxCasesList" class="list-disc list-inside space-y-1 text-gray-700">
+                            <!-- Los casos se insertarán aquí -->
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 id="minScoreTitle" class="text-lg font-semibold text-red-600 mb-2">Casos con Score Mínimo</h4>
+                        <ul id="minCasesList" class="list-disc list-inside space-y-1 text-gray-700">
+                            <!-- Los casos se insertarán aquí -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // --- 1. Preparación de Datos ---
+        
+        const rawScores = [
+            { case_id: 101, gf_code: 'GF1', qca_score: '0.66' }, { case_id: 101, gf_code: 'GF2', qca_score: '0.66' }, { case_id: 101, gf_code: 'GF3', qca_score: '0.33' },
+            { case_id: 101, gf_code: 'GF4', qca_score: '0.33' }, { case_id: 101, gf_code: 'GF5', qca_score: '0.33' }, { case_id: 101, gf_code: 'GF6', qca_score: '0.66' },
+            { case_id: 101, gf_code: 'GF7', qca_score: '1.0' }, { case_id: 101, gf_code: 'GF8', qca_score: '1.0' }, { case_id: 101, gf_code: 'GF9', qca_score: '0.33' },
+            { case_id: 101, gf_code: 'GF10', qca_score: '0.33' }, { case_id: 101, gf_code: 'GF11', qca_score: '0.66' }, { case_id: 101, gf_code: 'GF12', qca_score: '0.66' },
+            { case_id: 101, gf_code: 'GF13', qca_score: '0.33' }, { case_id: 101, gf_code: 'GF14', qca_score: '1.0' }, { case_id: 101, gf_code: 'GF15', qca_score: '0.66' },
+            { case_id: 101, gf_code: 'GF16', qca_score: '1.0' }, { case_id: 102, gf_code: 'GF1', qca_score: '1.0' }, { case_id: 102, gf_code: 'GF2', qca_score: '1.0' },
+            { case_id: 102, gf_code: 'GF3', qca_score: '1.0' }, { case_id: 102, gf_code: 'GF4', qca_score: '1.0' }, { case_id: 102, gf_code: 'GF5', qca_score: '1.0' },
+            { case_id: 102, gf_code: 'GF6', qca_score: '0.33' }, { case_id: 102, gf_code: 'GF7', qca_score: '1.0' }, { case_id: 102, gf_code: 'GF8', qca_score: '1.0' },
+            { case_id: 102, gf_code: 'GF9', qca_score: '1.0' }, { case_id: 102, gf_code: 'GF10', qca_score: '0.33' }, { case_id: 102, gf_code: 'GF11', qca_score: '1.0' },
+            { case_id: 102, gf_code: 'GF12', qca_score: '1.0' }, { case_id: 102, gf_code: 'GF13', qca_score: '1.0' }, { case_id: 102, gf_code: 'GF14', qca_score: '0.66' },
+            { case_id: 102, gf_code: 'GF15', qca_score: '1.0' }, { case_id: 102, gf_code: 'GF16', qca_score: '1.0' }, { case_id: 103, gf_code: 'GF1', qca_score: '1.0' },
+            { case_id: 103, gf_code: 'GF2', qca_score: '0.66' }, { case_id: 103, gf_code: 'GF3', qca_score: '1.0' }, { case_id: 103, gf_code: 'GF4', qca_score: '1.0' },
+            { case_id: 103, gf_code: 'GF5', qca_score: '1.0' }, { case_id: 103, gf_code: 'GF6', qca_score: '0.33' }, { case_id: 103, gf_code: 'GF7', qca_score: '0.66' },
+            { case_id: 103, gf_code: 'GF8', qca_score: '1.0' }, { case_id: 103, gf_code: 'GF9', qca_score: '0.33' }, { case_id: 103, gf_code: 'GF10', qca_score: '0.66' },
+            { case_id: 103, gf_code: 'GF11', qca_score: '1.0' }, { case_id: 103, gf_code: 'GF12', qca_score: '1.0' }, { case_id: 103, gf_code: 'GF13', qca_score: '1.0' },
+            { case_id: 103, gf_code: 'GF14', qca_score: '1.0' }, { case_id: 103, gf_code: 'GF15', qca_score: '1.0' }, { case_id: 103, gf_code: 'GF16', qca_score: '1.0' },
+            { case_id: 104, gf_code: 'GF1', qca_score: '0.66' }, { case_id: 104, gf_code: 'GF2', qca_score: '0.66' }, { case_id: 104, gf_code: 'GF3', qca_score: '1.0' },
+            { case_id: 104, gf_code: 'GF4', qca_score: '1.0' }, { case_id: 104, gf_code: 'GF5', qca_score: '1.0' }, { case_id: 104, gf_code: 'GF6', qca_score: '0.33' },
+            { case_id: 104, gf_code: 'GF7', qca_score: '1.0' }, { case_id: 104, gf_code: 'GF8', qca_score: '0.66' }, { case_id: 104, gf_code: 'GF9', qca_score: '0.0' },
+            { case_id: 104, gf_code: 'GF10', qca_score: '0.66' }, { case_id: 104, gf_code: 'GF11', qca_score: '0.33' }, { case_id: 104, gf_code: 'GF12', qca_score: '1.0' },
+            { case_id: 104, gf_code: 'GF13', qca_score: '0.66' }, { case_id: 104, gf_code: 'GF14', qca_score: '0.66' }, { case_id: 104, gf_code: 'GF15', qca_score: '1.0' },
+            { case_id: 104, gf_code: 'GF16', qca_score: '1.0' }, { case_id: 105, gf_code: 'GF1', qca_score: '0.66' }, { case_id: 105, gf_code: 'GF2', qca_score: '0.66' },
+            { case_id: 105, gf_code: 'GF3', qca_score: '1.0' }, { case_id: 105, gf_code: 'GF4', qca_score: '1.0' }, { case_id: 105, gf_code: 'GF5', qca_score: '0.33' },
+            { case_id: 105, gf_code: 'GF6', qca_score: '0.33' }, { case_id: 105, gf_code: 'GF7', qca_score: '0.33' }, { case_id: 105, gf_code: 'GF8', qca_score: '0.33' },
+            { case_id: 105, gf_code: 'GF9', qca_score: '1.0' }, { case_id: 105, gf_code: 'GF10', qca_score: '1.0' }, { case_id: 105, gf_code: 'GF11', qca_score: '0.33' },
+            { case_id: 105, gf_code: 'GF12', qca_score: '1.0' }, { case_id: 105, gf_code: 'GF13', qca_score: '0.66' }, { case_id: 105, gf_code: 'GF14', qca_score: '1.0' },
+            { case_id: 105, gf_code: 'GF15', qca_score: '0.33' }, { case_id: 105, gf_code: 'GF16', qca_score: '0.66' }, { case_id: 106, gf_code: 'GF1', qca_score: '1.0' },
+            { case_id: 106, gf_code: 'GF2', qca_score: '0.33' }, { case_id: 106, gf_code: 'GF3', qca_score: '0.66' }, { case_id: 106, gf_code: 'GF4', qca_score: '0.66' },
+            { case_id: 106, gf_code: 'GF5', qca_score: '0.66' }, { case_id: 106, gf_code: 'GF6', qca_score: '0.0' }, { case_id: 106, gf_code: 'GF7', qca_score: '1.0' },
+            { case_id: 106, gf_code: 'GF8', qca_score: '0.33' }, { case_id: 106, gf_code: 'GF9', qca_score: '1.0' }, { case_id: 106, gf_code: 'GF10', qca_score: '0.66' },
+            { case_id: 106, gf_code: 'GF11', qca_score: '1.0' }, { case_id: 106, gf_code: 'GF12', qca_score: '1.0' }, { case_id: 106, gf_code: 'GF13', qca_score: '0.66' },
+            { case_id: 106, gf_code: 'GF14', qca_score: '1.0' }, { case_id: 106, gf_code: 'GF15', qca_score: '0.66' }, { case_id: 106, gf_code: 'GF16', qca_score: '1.0' },
+            { case_id: 107, gf_code: 'GF1', qca_score: '1.0' }, { case_id: 107, gf_code: 'GF2', qca_score: '0.66' }, { case_id: 107, gf_code: 'GF3', qca_score: '1.0' },
+            { case_id: 107, gf_code: 'GF4', qca_score: '1.0' }, { case_id: 107, gf_code: 'GF5', qca_score: '0.33' }, { case_id: 107, gf_code: 'GF6', qca_score: '0.0' },
+            { case_id: 107, gf_code: 'GF7', qca_score: '1.0' }, { case_id: 107, gf_code: 'GF8', qca_score: '1.0' }, { case_id: 107, gf_code: 'GF9', qca_score: '0.66' },
+            { case_id: 107, gf_code: 'GF10', qca_score: '0.66' }, { case_id: 107, gf_code: 'GF11', qca_score: '0.33' }, { case_id: 107, gf_code: 'GF12', qca_score: '1.0' },
+            { case_id: 107, gf_code: 'GF13', qca_score: '1.0' }, { case_id: 107, gf_code: 'GF14', qca_score: '0.33' }, { case_id: 107, gf_code: 'GF15', qca_score: '0.66' },
+            { case_id: 107, gf_code: 'GF16', qca_score: '1.0' }, { case_id: 108, gf_code: 'GF1', qca_score: '1.0' }, { case_id: 108, gf_code: 'GF2', qca_score: '1.0' },
+            { case_id: 108, gf_code: 'GF3', qca_score: '0.66' }, { case_id: 108, gf_code: 'GF4', qca_score: '1.0' }, { case_id: 108, gf_code: 'GF5', qca_score: '0.66' },
+            { case_id: 108, gf_code: 'GF6', qca_score: '1.0' }, { case_id: 108, gf_code: 'GF7', qca_score: '1.0' }, { case_id: 108, gf_code: 'GF8', qca_score: '0.66' },
+            { case_id: 108, gf_code: 'GF9', qca_score: '1.0' }, { case_id: 108, gf_code: 'GF10', qca_score: '0.66' }, { case_id: 108, gf_code: 'GF11', qca_score: '1.0' },
+            { case_id: 108, gf_code: 'GF12', qca_score: '0.66' }, { case_id: 108, gf_code: 'GF13', qca_score: '1.0' }, { case_id: 108, gf_code: 'GF14', qca_score: '1.0' },
+            { case_id: 108, gf_code: 'GF15', qca_score: '1.0' }, { case_id: 108, gf_code: 'GF16', qca_score: '1.0' }, { case_id: 109, gf_code: 'GF1', qca_score: '0.66' },
+            { case_id: 109, gf_code: 'GF2', qca_score: '0.33' }, { case_id: 109, gf_code: 'GF3', qca_score: '1.0' }, { case_id: 109, gf_code: 'GF4', qca_score: '1.0' },
+            { case_id: 109, gf_code: 'GF5', qca_score: '0.33' }, { case_id: 109, gf_code: 'GF6', qca_score: '0.33' }, { case_id: 109, gf_code: 'GF7', qca_score: '1.0' },
+            { case_id: 109, gf_code: 'GF8', qca_score: '1.0' }, { case_id: 109, gf_code: 'GF9', qca_score: '0.0' }, { case_id: 109, gf_code: 'GF10', qca_score: '1.0' },
+            { case_id: 109, gf_code: 'GF11', qca_score: '0.66' }, { case_id: 109, gf_code: 'GF12', qca_score: '0.66' }, { case_id: 109, gf_code: 'GF13', qca_score: '0.33' },
+            { case_id: 109, gf_code: 'GF14', qca_score: '1.0' }, { case_id: 109, gf_code: 'GF15', qca_score: '0.33' }, { case_id: 109, gf_code: 'GF16', qca_score: '1.0' },
+            { case_id: 110, gf_code: 'GF1', qca_score: '1.0' }, { case_id: 110, gf_code: 'GF2', qca_score: '1.0' }, { case_id: 110, gf_code: 'GF3', qca_score: '1.0' },
+            { case_id: 110, gf_code: 'GF4', qca_score: '1.0' }, { case_id: 110, gf_code: 'GF5', qca_score: '0.66' }, { case_id: 110, gf_code: 'GF6', qca_score: '0.66' },
+            { case_id: 110, gf_code: 'GF7', qca_score: '1.0' }, { case_id: 110, gf_code: 'GF8', qca_score: '1.0' }, { case_id: 110, gf_code: 'GF9', qca_score: '0.0' },
+            { case_id: 110, gf_code: 'GF10', qca_score: '0.66' }, { case_id: 110, gf_code: 'GF11', qca_score: '0.66' }, { case_id: 110, gf_code: 'GF12', qca_score: '0.66' },
+            { case_id: 110, gf_code: 'GF13', qca_score: '0.66' }, { case_id: 110, gf_code: 'GF14', qca_score: '1.0' }, { case_id: 110, gf_code: 'GF15', qca_score: '0.33' },
+            { case_id: 110, gf_code: 'GF16', qca_score: '0.0' }, { case_id: 111, gf_code: 'GF1', qca_score: '1.0' }, { case_id: 111, gf_code: 'GF2', qca_score: '1.0' },
+            { case_id: 111, gf_code: 'GF3', qca_score: '1.0' }, { case_id: 111, gf_code: 'GF4', qca_score: '0.66' }, { case_id: 111, gf_code: 'GF5', qca_score: '0.33' },
+            { case_id: 111, gf_code: 'GF6', qca_score: '0.33' }, { case_id: 111, gf_code: 'GF7', qca_score: '0.66' }, { case_id: 111, gf_code: 'GF8', qca_score: '0.66' },
+            { case_id: 111, gf_code: 'GF9', qca_score: '1.0' }, { case_id: 111, gf_code: 'GF10', qca_score: '0.33' }, { case_id: 111, gf_code: 'GF11', qca_score: '0.33' },
+            { case_id: 111, gf_code: 'GF12', qca_score: '1.0' }, { case_id: 111, gf_code: 'GF13', qca_score: '0.66' }, { case_id: 111, gf_code: 'GF14', qca_score: '1.0' },
+            { case_id: 111, gf_code: 'GF15', qca_score: '0.66' }, { case_id: 111, gf_code: 'GF16', qca_score: '1.0' }, { case_id: 112, gf_code: 'GF1', qca_score: '1.0' },
+            { case_id: 112, gf_code: 'GF2', qca_score: '0.66' }, { case_id: 112, gf_code: 'GF3', qca_score: '0.33' }, { case_id: 112, gf_code: 'GF4', qca_score: '0.66' },
+            { case_id: 112, gf_code: 'GF5', qca_score: '0.66' }, { case_id: 112, gf_code: 'GF6', qca_score: '0.66' }, { case_id: 112, gf_code: 'GF7', qca_score: '1.0' },
+            { case_id: 112, gf_code: 'GF8', qca_score: '1.0' }, { case_id: 112, gf_code: 'GF9', qca_score: '0.0' }, { case_id: 112, gf_code: 'GF10', qca_score: '0.33' },
+            { case_id: 112, gf_code: 'GF11', qca_score: '0.33' }, { case_id: 112, gf_code: 'GF12', qca_score: '0.33' }, { case_id: 112, gf_code: 'GF13', qca_score: '0.66' },
+            { case_id: 112, gf_code: 'GF14', qca_score: '0.0' }, { case_id: 112, gf_code: 'GF15', qca_score: '1.0' }, { case_id: 112, gf_code: 'GF16', qca_score: '1.0' },
+            { case_id: 113, gf_code: 'GF1', qca_score: '1.0' }, { case_id: 113, gf_code: 'GF2', qca_score: '1.0' }, { case_id: 113, gf_code: 'GF3', qca_score: '1.0' },
+            { case_id: 113, gf_code: 'GF4', qca_score: '1.0' }, { case_id: 113, gf_code: 'GF5', qca_score: '0.66' }, { case_id: 113, gf_code: 'GF6', qca_score: '0.33' },
+            { case_id: 113, gf_code: 'GF7', qca_score: '0.33' }, { case_id: 113, gf_code: 'GF8', qca_score: '0.66' }, { case_id: 113, gf_code: 'GF9', qca_score: '1.0' },
+            { case_id: 113, gf_code: 'GF10', qca_score: '0.33' }, { case_id: 113, gf_code: 'GF11', qca_score: '0.66' }, { case_id: 113, gf_code: 'GF12', qca_score: '1.0' },
+            { case_id: 113, gf_code: 'GF13', qca_score: '1.0' }, { case_id: 113, gf_code: 'GF14', qca_score: '0.0' }, { case_id: 113, gf_code: 'GF15', qca_score: '0.33' },
+            { case_id: 113, gf_code: 'GF16', qca_score: '1.0' }, { case_id: 114, gf_code: 'GF1', qca_score: '0.66' }, { case_id: 114, gf_code: 'GF2', qca_score: '1.0' },
+            { case_id: 114, gf_code: 'GF3', qca_score: '0.66' }, { case_id: 114, gf_code: 'GF4', qca_score: '0.66' }, { case_id: 114, gf_code: 'GF5', qca_score: '1.0' },
+            { case_id: 114, gf_code: 'GF6', qca_score: '0.66' }, { case_id: 114, gf_code: 'GF7', qca_score: '1.0' }, { case_id: 114, gf_code: 'GF8', qca_score: '1.0' },
+            { case_id: 114, gf_code: 'GF9', qca_score: '1.0' }, { case_id: 114, gf_code: 'GF10', qca_score: '0.0' }, { case_id: 114, gf_code: 'GF11', qca_score: '0.33' },
+            { case_id: 114, gf_code: 'GF12', qca_score: '0.33' }, { case_id: 114, gf_code: 'GF13', qca_score: '0.66' }, { case_id: 114, gf_code: 'GF14', qca_score: '0.33' },
+            { case_id: 114, gf_code: 'GF15', qca_score: '0.0' }, { case_id: 114, gf_code: 'GF16', qca_score: '0.33' }, { case_id: 115, gf_code: 'GF1', qca_score: '0.66' },
+            { case_id: 115, gf_code: 'GF2', qca_score: '1.0' }, { case_id: 115, gf_code: 'GF3', qca_score: '1.0' }, { case_id: 115, gf_code: 'GF4', qca_score: '1.0' },
+            { case_id: 115, gf_code: 'GF5', qca_score: '0.66' }, { case_id: 115, gf_code: 'GF6', qca_score: '0.33' }, { case_id: 115, gf_code: 'GF7', qca_score: '0.66' },
+            { case_id: 115, gf_code: 'GF8', qca_score: '1.0' }, { case_id: 115, gf_code: 'GF9', qca_score: '0.0' }, { case_id: 115, gf_code: 'GF10', qca_score: '1.0' },
+            { case_id: 115, gf_code: 'GF11', qca_score: '0.66' }, { case_id: 115, gf_code: 'GF12', qca_score: '1.0' }, { case_id: 115, gf_code: 'GF13', qca_score: '1.0' },
+            { case_id: 115, gf_code: 'GF14', qca_score: '1.0' }, { case_id: 115, gf_code: 'GF15', qca_score: '1.0' }, { case_id: 115, gf_code: 'GF16', qca_score: '1.0' },
+            { case_id: 116, gf_code: 'GF1', qca_score: '1.0' }, { case_id: 116, gf_code: 'GF2', qca_score: '1.0' }, { case_id: 116, gf_code: 'GF3', qca_score: '1.0' },
+            { case_id: 116, gf_code: 'GF4', qca_score: '0.66' }, { case_id: 116, gf_code: 'GF5', qca_score: '1.0' }, { case_id: 116, gf_code: 'GF6', qca_score: '1.0' },
+            { case_id: 116, gf_code: 'GF7', qca_score: '1.0' }, { case_id: 116, gf_code: 'GF8', qca_score: '1.0' }, { case_id: 116, gf_code: 'GF9', qca_score: '1.0' },
+            { case_id: 116, gf_code: 'GF10', qca_score: '0.33' }, { case_id: 116, gf_code: 'GF11', qca_score: '1.0' }, { case_id: 116, gf_code: 'GF12', qca_score: '1.0' },
+            { case_id: 116, gf_code: 'GF13', qca_score: '1.0' }, { case_id: 116, gf_code: 'GF14', qca_score: '1.0' }, { case_id: 116, gf_code: 'GF15', qca_score: '1.0' },
+            { case_id: 116, gf_code: 'GF16', qca_score: '1.0' }, { case_id: 117, gf_code: 'GF1', qca_score: '1.0' }, { case_id: 117, gf_code: 'GF2', qca_score: '1.0' },
+            { case_id: 117, gf_code: 'GF3', qca_score: '1.0' }, { case_id: 117, gf_code: 'GF4', qca_score: '1.0' }, { case_id: 117, gf_code: 'GF5', qca_score: '0.66' },
+            { case_id: 117, gf_code: 'GF6', qca_score: '0.0' }, { case_id: 117, gf_code: 'GF7', qca_score: '1.0' }, { case_id: 117, gf_code: 'GF8', qca_score: '1.0' },
+            { case_id: 117, gf_code: 'GF9', qca_score: '1.0' }, { case_id: 117, gf_code: 'GF10', qca_score: '1.0' }, { case_id: 117, gf_code: 'GF11', qca_score: '0.33' },
+            { case_id: 117, gf_code: 'GF12', qca_score: '1.0' }, { case_id: 117, gf_code: 'GF13', qca_score: '0.33' }, { case_id: 117, gf_code: 'GF14', qca_score: '1.0' },
+            { case_id: 117, gf_code: 'GF15', qca_score: '1.0' }, { case_id: 117, gf_code: 'GF16', qca_score: '0.66' }, { case_id: 118, gf_code: 'GF1', qca_score: '1.0' },
+            { case_id: 118, gf_code: 'GF2', qca_score: '0.66' }, { case_id: 118, gf_code: 'GF3', qca_score: '0.33' }, { case_id: 118, gf_code: 'GF4', qca_score: '0.33' },
+            { case_id: 118, gf_code: 'GF5', qca_score: '0.33' }, { case_id: 118, gf_code: 'GF6', qca_score: '0.0' }, { case_id: 118, gf_code: 'GF7', qca_score: '0.33' },
+            { case_id: 118, gf_code: 'GF8', qca_score: '0.33' }, { case_id: 118, gf_code: 'GF9', qca_score: '0.66' }, { case_id: 118, gf_code: 'GF10', qca_score: '1.0' },
+            { case_id: 118, gf_code: 'GF11', qca_score: '0.0' }, { case_id: 118, gf_code: 'GF12', qca_score: '1.0' }, { case_id: 118, gf_code: 'GF13', qca_score: '0.33' },
+            { case_id: 118, gf_code: 'GF14', qca_score: '1.0' }, { case_id: 118, gf_code: 'GF15', qca_score: '0.0' }, { case_id: 118, gf_code: 'GF16', qca_score: '1.0' },
+            { case_id: 119, gf_code: 'GF1', qca_score: '0.66' }, { case_id: 119, gf_code: 'GF2', qca_score: '0.66' }, { case_id: 119, gf_code: 'GF3', qca_score: '0.33' },
+            { case_id: 119, gf_code: 'GF4', qca_score: '0.33' }, { case_id: 119, gf_code: 'GF5', qca_score: '0.66' }, { case_id: 119, gf_code: 'GF6', qca_score: '0.33' },
+            { case_id: 119, gf_code: 'GF7', qca_score: '0.66' }, { case_id: 119, gf_code: 'GF8', qca_score: '0.66' }, { case_id: 119, gf_code: 'GF9', qca_score: '1.0' },
+            { case_id: 119, gf_code: 'GF10', qca_score: '0.66' }, { case_id: 119, gf_code: 'GF11', qca_score: '0.33' }, { case_id: 119, gf_code: 'GF12', qca_score: '0.66' },
+            { case_id: 119, gf_code: 'GF13', qca_score: '0.66' }, { case_id: 119, gf_code: 'GF14', qca_score: '0.66' }, { case_id: 119, gf_code: 'GF15', qca_score: '0.66' },
+            { case_id: 119, gf_code: 'GF16', qca_score: '1.0' }, { case_id: 120, gf_code: 'GF1', qca_score: '0.66' }, { case_id: 120, gf_code: 'GF2', qca_score: '0.33' },
+            { case_id: 120, gf_code: 'GF3', qca_score: '0.33' }, { case_id: 120, gf_code: 'GF4', qca_score: '0.0' }, { case_id: 120, gf_code: 'GF5', qca_score: '0.66' },
+            { case_id: 120, gf_code: 'GF6', qca_score: '1.0' }, { case_id: 120, gf_code: 'GF7', qca_score: '0.33' }, { case_id: 120, gf_code: 'GF8', qca_score: '0.66' },
+            { case_id: 120, gf_code: 'GF9', qca_score: '0.66' }, { case_id: 120, gf_code: 'GF10', qca_score: '1.0' }, { case_id: 120, gf_code: 'GF11', qca_score: '0.66' },
+            { case_id: 120, gf_code: 'GF12', qca_score: '1.0' }, { case_id: 120, gf_code: 'GF13', qca_score: '1.0' }, { case_id: 120, gf_code: 'GF14', qca_score: '0.0' },
+            { case_id: 120, gf_code: 'GF15', qca_score: '1.0' }, { case_id: 120, gf_code: 'GF16', qca_score: '1.0' }, { case_id: 121, gf_code: 'GF1', qca_score: '0.66' },
+            { case_id: 121, gf_code: 'GF2', qca_score: '0.33' }, { case_id: 121, gf_code: 'GF3', qca_score: '0.33' }, { case_id: 121, gf_code: 'GF4', qca_score: '0.33' },
+            { case_id: 121, gf_code: 'GF5', qca_score: '1.0' }, { case_id: 121, gf_code: 'GF6', qca_score: '0.33' }, { case_id: 121, gf_code: 'GF7', qca_score: '1.0' },
+            { case_id: 121, gf_code: 'GF8', qca_score: '1.0' }, { case_id: 121, gf_code: 'GF9', qca_score: '0.0' }, { case_id: 121, gf_code: 'GF10', qca_score: '1.0' },
+            { case_id: 121, gf_code: 'GF11', qca_score: '1.0' }, { case_id: 121, gf_code: 'GF12', qca_score: '1.0' }, { case_id: 121, gf_code: 'GF13', qca_score: '0.66' },
+            { case_id: 121, gf_code: 'GF14', qca_score: '0.66' }, { case_id: 121, gf_code: 'GF15', qca_score: '0.66' }, { case_id: 121, gf_code: 'GF16', qca_score: '1.0' },
+            { case_id: 122, gf_code: 'GF1', qca_score: '1.0' }, { case_id: 122, gf_code: 'GF2', qca_score: '1.0' }, { case_id: 122, gf_code: 'GF3', qca_score: '0.66' },
+            { case_id: 122, gf_code: 'GF4', qca_score: '0.66' }, { case_id: 122, gf_code: 'GF5', qca_score: '0.33' }, { case_id: 122, gf_code: 'GF6', qca_score: '0.66' },
+            { case_id: 122, gf_code: 'GF7', qca_score: '0.33' }, { case_id: 122, gf_code: 'GF8', qca_score: '0.66' }, { case_id: 122, gf_code: 'GF9', qca_score: '0.66' },
+            { case_id: 122, gf_code: 'GF10', qca_score: '0.66' }, { case_id: 122, gf_code: 'GF11', qca_score: '0.33' }, { case_id: 122, gf_code: 'GF12', qca_score: '0.33' },
+            { case_id: 122, gf_code: 'GF13', qca_score: '0.33' }, { case_id: 122, gf_code: 'GF14', qca_score: '0.0' }, { case_id: 122, gf_code: 'GF15', qca_score: '1.0' },
+            { case_id: 122, gf_code: 'GF16', qca_score: '0.66' }, { case_id: 123, gf_code: 'GF1', qca_score: '1.0' }, { case_id: 123, gf_code: 'GF2', qca_score: '1.0' },
+            { case_id: 123, gf_code: 'GF3', qca_score: '1.0' }, { case_id: 123, gf_code: 'GF4', qca_score: '1.0' }, { case_id: 123, gf_code: 'GF5', qca_score: '1.0' },
+            { case_id: 123, gf_code: 'GF6', qca_score: '0.0' }, { case_id: 123, gf_code: 'GF7', qca_score: '1.0' }, { case_id: 123, gf_code: 'GF8', qca_score: '0.66' },
+            { case_id: 123, gf_code: 'GF9', qca_score: '1.0' }, { case_id: 123, gf_code: 'GF10', qca_score: '0.33' }, { case_id: 123, gf_code: 'GF11', qca_score: '1.0' },
+            { case_id: 123, gf_code: 'GF12', qca_score: '1.0' }, { case_id: 123, gf_code: 'GF13', qca_score: '0.33' }, { case_id: 123, gf_code: 'GF14', qca_score: '1.0' },
+            { case_id: 123, gf_code: 'GF15', qca_score: '1.0' }, { case_id: 123, gf_code: 'GF16', qca_score: '1.0' }, { case_id: 124, gf_code: 'GF1', qca_score: '1.0' },
+            { case_id: 124, gf_code: 'GF2', qca_score: '0.0' }, { case_id: 124, gf_code: 'GF3', qca_score: '0.0' }, { case_id: 124, gf_code: 'GF4', qca_score: '0.33' },
+            { case_id: 124, gf_code: 'GF5', qca_score: '0.66' }, { case_id: 124, gf_code: 'GF6', qca_score: '1.0' }, { case_id: 124, gf_code: 'GF7', qca_score: '0.0' },
+            { case_id: 124, gf_code: 'GF8', qca_score: '0.33' }, { case_id: 124, gf_code: 'GF9', qca_score: '1.0' }, { case_id: 124, gf_code: 'GF10', qca_score: '1.0' },
+            { case_id: 124, gf_code: 'GF11', qca_score: '1.0' }, { case_id: 124, gf_code: 'GF12', qca_score: '1.0' }, { case_id: 124, gf_code: 'GF13', qca_score: '0.66' },
+            { case_id: 124, gf_code: 'GF14', qca_score: '0.0' }, { case_id: 124, gf_code: 'GF15', qca_score: '0.66' }, { case_id: 124, gf_code: 'GF16', qca_score: '1.0' },
+            { case_id: 125, gf_code: 'GF1', qca_score: '0.66' }, { case_id: 125, gf_code: 'GF2', qca_score: '1.0' }, { case_id: 125, gf_code: 'GF3', qca_score: '1.0' },
+            { case_id: 125, gf_code: 'GF4', qca_score: '0.66' }, { case_id: 125, gf_code: 'GF5', qca_score: '0.33' }, { case_id: 125, gf_code: 'GF6', qca_score: '0.33' },
+            { case_id: 125, gf_code: 'GF7', qca_score: '0.0' }, { case_id: 125, gf_code: 'GF8', qca_score: '0.33' }, { case_id: 125, gf_code: 'GF9', qca_score: '0.66' },
+            { case_id: 125, gf_code: 'GF10', qca_score: '0.66' }, { case_id: 125, gf_code: 'GF11', qca_score: '0.33' }, { case_id: 125, gf_code: 'GF12', qca_score: '1.0' },
+            { case_id: 125, gf_code: 'GF13', qca_score: '0.33' }, { case_id: 125, gf_code: 'GF14', qca_score: '1.0' }, { case_id: 125, gf_code: 'GF15', qca_score: '0.66' },
+            { case_id: 125, gf_code: 'GF16', qca_score: '0.66' }, { case_id: 126, gf_code: 'GF1', qca_score: '1.0' }, { case_id: 126, gf_code: 'GF2', qca_score: '1.0' },
+            { case_id: 126, gf_code: 'GF3', qca_score: '0.66' }, { case_id: 126, gf_code: 'GF4', qca_score: '0.66' }, { case_id: 126, gf_code: 'GF5', qca_score: '0.66' },
+            { case_id: 126, gf_code: 'GF6', qca_score: '0.66' }, { case_id: 126, gf_code: 'GF7', qca_score: '1.0' }, { case_id: 126, gf_code: 'GF8', qca_score: '1.0' },
+            { case_id: 126, gf_code: 'GF9', qca_score: '0.33' }, { case_id: 126, gf_code: 'GF10', qca_score: '0.66' }, { case_id: 126, gf_code: 'GF11', qca_score: '1.0' },
+            { case_id: 126, gf_code: 'GF12', qca_score: '1.0' }, { case_id: 126, gf_code: 'GF13', qca_score: '1.0' }, { case_id: 126, gf_code: 'GF14', qca_score: '0.0' },
+            { case_id: 126, gf_code: 'GF15', qca_score: '1.0' }, { case_id: 126, gf_code: 'GF16', qca_score: '1.0' }, { case_id: 127, gf_code: 'GF1', qca_score: '1.0' },
+            { case_id: 127, gf_code: 'GF2', qca_score: '1.0' }, { case_id: 127, gf_code: 'GF3', qca_score: '0.66' }, { case_id: 127, gf_code: 'GF4', qca_score: '0.66' },
+            { case_id: 127, gf_code: 'GF5', qca_score: '0.66' }, { case_id: 127, gf_code: 'GF6', qca_score: '0.66' }, { case_id: 127, gf_code: 'GF7', qca_score: '1.0' },
+            { case_id: 127, gf_code: 'GF8', qca_score: '1.0' }, { case_id: 127, gf_code: 'GF9', qca_score: '1.0' }, { case_id: 127, gf_code: 'GF10', qca_score: '1.0' },
+            { case_id: 127, gf_code: 'GF11', qca_score: '1.0' }, { case_id: 127, gf_code: 'GF12', qca_score: '1.0' }, { case_id: 127, gf_code: 'GF13', qca_score: '0.33' },
+            { case_id: 127, gf_code: 'GF14', qca_score: '1.0' }, { case_id: 127, gf_code: 'GF15', qca_score: '1.0' }, { case_id: 127, gf_code: 'GF16', qca_score: '1.0' },
+            { case_id: 128, gf_code: 'GF1', qca_score: '1.0' }, { case_id: 128, gf_code: 'GF2', qca_score: '0.66' }, { case_id: 128, gf_code: 'GF3', qca_score: '0.33' },
+            { case_id: 128, gf_code: 'GF4', qca_score: '0.33' }, { case_id: 128, gf_code: 'GF5', qca_score: '0.66' }, { case_id: 128, gf_code: 'GF6', qca_score: '0.66' },
+            { case_id: 128, gf_code: 'GF7', qca_score: '0.66' }, { case_id: 128, gf_code: 'GF8', qca_score: '0.33' }, { case_id: 128, gf_code: 'GF9', qca_score: '0.0' },
+            { case_id: 128, gf_code: 'GF10', qca_score: '0.66' }, { case_id: 128, gf_code: 'GF11', qca_score: '0.66' }, { case_id: 128, gf_code: 'GF12', qca_score: '1.0' },
+            { case_id: 128, gf_code: 'GF13', qca_score: '0.66' }, { case_id: 128, gf_code: 'GF14', qca_score: '0.0' }, { case_id: 128, gf_code: 'GF15', qca_score: '0.33' },
+            { case_id: 128, gf_code: 'GF16', qca_score: '0.66' }, { case_id: 129, gf_code: 'GF1', qca_score: '1.0' }, { case_id: 129, gf_code: 'GF2', qca_score: '0.66' },
+            { case_id: 129, gf_code: 'GF3', qca_score: '0.33' }, { case_id: 129, gf_code: 'GF4', qca_score: '1.0' }, { case_id: 129, gf_code: 'GF5', qca_score: '0.33' },
+            { case_id: 129, gf_code: 'GF6', qca_score: '0.33' }, { case_id: 129, gf_code: 'GF7', qca_score: '1.0' }, { case_id: 129, gf_code: 'GF8', qca_score: '0.66' },
+            { case_id: 129, gf_code: 'GF9', qca_score: '0.33' }, { case_id: 129, gf_code: 'GF10', qca_score: '0.66' }, { case_id: 129, gf_code: 'GF11', qca_score: '1.0' },
+            { case_id: 129, gf_code: 'GF12', qca_score: '1.0' }, { case_id: 129, gf_code: 'GF13', qca_score: '1.0' }, { case_id: 129, gf_code: 'GF14', qca_score: '0.33' },
+            { case_id: 129, gf_code: 'GF15', qca_score: '1.0' }, { case_id: 129, gf_code: 'GF16', qca_score: '1.0' }, { case_id: 130, gf_code: 'GF1', qca_score: '1.0' },
+            { case_id: 130, gf_code: 'GF2', qca_score: '1.0' }, { case_id: 130, gf_code: 'GF3', qca_score: '0.33' }, { case_id: 130, gf_code: 'GF4', qca_score: '1.0' },
+            { case_id: 130, gf_code: 'GF5', qca_score: '0.66' }, { case_id: 130, gf_code: 'GF6', qca_score: '0.66' }, { case_id: 130, gf_code: 'GF7', qca_score: '1.0' },
+            { case_id: 130, gf_code: 'GF8', qca_score: '1.0' }, { case_id: 130, gf_code: 'GF9', qca_score: '0.0' }, { case_id: 130, gf_code: 'GF10', qca_score: '1.0' },
+            { case_id: 130, gf_code: 'GF11', qca_score: '0.33' }, { case_id: 130, gf_code: 'GF12', qca_score: '1.0' }, { case_id: 130, gf_code: 'GF13', qca_score: '1.0' },
+            { case_id: 130, gf_code: 'GF14', qca_score: '1.0' }, { case_id: 130, gf_code: 'GF15', qca_score: '0.33' }, { case_id: 130, gf_code: 'GF16', qca_score: '1.0' },
+            { case_id: 131, gf_code: 'GF1', qca_score: '1.0' }, { case_id: 131, gf_code: 'GF2', qca_score: '0.33' }, { case_id: 131, gf_code: 'GF3', qca_score: '0.33' },
+            { case_id: 131, gf_code: 'GF4', qca_score: '0.66' }, { case_id: 131, gf_code: 'GF5', qca_score: '1.0' }, { case_id: 131, gf_code: 'GF6', qca_score: '1.0' },
+            { case_id: 131, gf_code: 'GF7', qca_score: '0.66' }, { case_id: 131, gf_code: 'GF8', qca_score: '1.0' }, { case_id: 131, gf_code: 'GF9', qca_score: '0.33' },
+            { case_id: 131, gf_code: 'GF10', qca_score: '0.66' }, { case_id: 131, gf_code: 'GF11', qca_score: '1.0' }, { case_id: 131, gf_code: 'GF12', qca_score: '1.0' },
+            { case_id: 131, gf_code: 'GF13', qca_score: '1.0' }, { case_id: 131, gf_code: 'GF14', qca_score: '0.66' }, { case_id: 131, gf_code: 'GF15', qca_score: '1.0' },
+            { case_id: 131, gf_code: 'GF16', qca_score: '1.0' }, { case_id: 132, gf_code: 'GF1', qca_score: '1.0' }, { case_id: 132, gf_code: 'GF2', qca_score: '0.33' },
+            { case_id: 132, gf_code: 'GF3', qca_score: '0.66' }, { case_id: 132, gf_code: 'GF4', qca_score: '0.33' }, { case_id: 132, gf_code: 'GF5', qca_score: '0.66' },
+            { case_id: 132, gf_code: 'GF6', qca_score: '0.33' }, { case_id: 132, gf_code: 'GF7', qca_score: '0.33' }, { case_id: 132, gf_code: 'GF8', qca_score: '0.33' },
+            { case_id: 132, gf_code: 'GF9', qca_score: '1.0' }, { case_id: 132, gf_code: 'GF10', qca_score: '0.66' }, { case_id: 132, gf_code: 'GF11', qca_score: '0.66' },
+            { case_id: 132, gf_code: 'GF12', qca_score: '0.33' }, { case_id: 132, gf_code: 'GF13', qca_score: '0.66' }, { case_id: 132, gf_code: 'GF14', qca_score: '1.0' },
+            { case_id: 132, gf_code: 'GF15', qca_score: '0.66' }, { case_id: 132, gf_code: 'GF16', qca_score: '1.0' }, { case_id: 133, gf_code: 'GF1', qca_score: '1.0' },
+            { case_id: 133, gf_code: 'GF2', qca_score: '0.66' }, { case_id: 133, gf_code: 'GF3', qca_score: '0.33' }, { case_id: 133, gf_code: 'GF4', qca_score: '0.66' },
+            { case_id: 133, gf_code: 'GF5', qca_score: '0.66' }, { case_id: 133, gf_code: 'GF6', qca_score: '0.66' }, { case_id: 133, gf_code: 'GF7', qca_score: '1.0' },
+            { case_id: 133, gf_code: 'GF8', qca_score: '1.0' }, { case_id: 133, gf_code: 'GF9', qca_score: '1.0' }, { case_id: 133, gf_code: 'GF10', qca_score: '1.0' },
+            { case_id: 133, gf_code: 'GF11', qca_score: '1.0' }, { case_id: 133, gf_code: 'GF12', qca_score: '1.0' }, { case_id: 133, gf_code: 'GF13', qca_score: '0.33' },
+            { case_id: 133, gf_code: 'GF14', qca_score: '1.0' }, { case_id: 133, gf_code: 'GF15', qca_score: '0.33' }, { case_id: 133, gf_code: 'GF16', qca_score: '1.0' },
+            { case_id: 134, gf_code: 'GF1', qca_score: '0.66' }, { case_id: 134, gf_code: 'GF2', qca_score: '0.66' }, { case_id: 134, gf_code: 'GF3', qca_score: '1.0' },
+            { case_id: 134, gf_code: 'GF4', qca_score: '1.0' }, { case_id: 134, gf_code: 'GF5', qca_score: '0.66' }, { case_id: 134, gf_code: 'GF6', qca_score: '0.33' },
+            { case_id: 134, gf_code: 'GF7', qca_score: '0.66' }, { case_id: 134, gf_code: 'GF8', qca_score: '0.66' }, { case_id: 134, gf_code: 'GF9', qca_score: '0.66' },
+            { case_id: 134, gf_code: 'GF10', qca_score: '1.0' }, { case_id: 134, gf_code: 'GF11', qca_score: '1.0' }, { case_id: 134, gf_code: 'GF12', qca_score: '0.66' },
+            { case_id: 134, gf_code: 'GF13', qca_score: '1.0' }, { case_id: 134, gf_code: 'GF14', qca_score: '0.66' }, { case_id: 134, gf_code: 'GF15', qca_score: '0.33' },
+            { case_id: 134, gf_code: 'GF16', qca_score: '1.0' }, { case_id: 135, gf_code: 'GF1', qca_score: '1.0' }, { case_id: 135, gf_code: 'GF2', qca_score: '0.33' },
+            { case_id: 135, gf_code: 'GF3', qca_score: '0.66' }, { case_id: 135, gf_code: 'GF4', qca_score: '0.66' }, { case_id: 135, gf_code: 'GF5', qca_score: '0.33' },
+            { case_id: 135, gf_code: 'GF6', qca_score: '0.33' }, { case_id: 135, gf_code: 'GF7', qca_score: '0.33' }, { case_id: 135, gf_code: 'GF8', qca_score: '0.66' },
+            { case_id: 135, gf_code: 'GF9', qca_score: '0.0' }, { case_id: 135, gf_code: 'GF10', qca_score: '1.0' }, { case_id: 135, gf_code: 'GF11', qca_score: '1.0' },
+            { case_id: 135, gf_code: 'GF12', qca_score: '0.33' }, { case_id: 135, gf_code: 'GF13', qca_score: '0.33' }, { case_id: 135, gf_code: 'GF14', qca_score: '0.0' },
+            { case_id: 135, gf_code: 'GF15', qca_score: '0.33' }, { case_id: 135, gf_code: 'GF16', qca_score: '0.33' }, { case_id: 136, gf_code: 'GF1', qca_score: '1.0' },
+            { case_id: 136, gf_code: 'GF2', qca_score: '1.0' }, { case_id: 136, gf_code: 'GF3', qca_score: '0.66' }, { case_id: 136, gf_code: 'GF4', qca_score: '1.0' },
+            { case_id: 136, gf_code: 'GF5', qca_score: '0.66' }, { case_id: 136, gf_code: 'GF6', qca_score: '0.33' }, { case_id: 136, gf_code: 'GF7', qca_score: '0.66' },
+            { case_id: 136, gf_code: 'GF8', qca_score: '1.0' }, { case_id: 136, gf_code: 'GF9', qca_score: '1.0' }, { case_id: 136, gf_code: 'GF10', qca_score: '0.66' },
+            { case_id: 136, gf_code: 'GF11', qca_score: '1.0' }, { case_id: 136, gf_code: 'GF12', qca_score: '1.0' }, { case_id: 136, gf_code: 'GF13', qca_score: '0.66' },
+            { case_id: 136, gf_code: 'GF14', qca_score: '1.0' }, { case_id: 136, gf_code: 'GF15', qca_score: '1.0' }, { case_id: 136, gf_code: 'GF16', qca_score: '1.0' }
+        ];
+
+        const casesData = [
+            { case_id: 101, case_slug: 'arena-breivoll-norway' }, { case_id: 102, case_slug: 'ant-forest-protected-area-project' },
+            { case_id: 103, case_slug: 'roskilde-craftsman-dormitory' }, { case_id: 104, case_slug: 'circular-green-blocks' },
+            { case_id: 105, case_slug: 'ejido-solar' }, { case_id: 106, case_slug: 'sonoma-county-winegrowers-electrification-project' },
+            { case_id: 107, case_slug: 'goulburn-murray-resilience-taskforce' }, { case_id: 108, case_slug: 'the-mymizu-project' },
+            { case_id: 109, case_slug: 'mixed-professionals-of-the-primary-sector-mpps-in-gipuzkoa' }, { case_id: 110, case_slug: 'developing-sustainable-urban-and-periurban-agriculture-in-são-paulo' },
+            { case_id: 111, case_slug: 'the-marin-carbon-project' }, { case_id: 112, case_slug: 'ontario-climate-action-london' },
+            { case_id: 113, case_slug: 'energy-community-avedøre' }, { case_id: 114, case_slug: 'holistic-land-use-sporring' },
+            { case_id: 115, case_slug: 'denmark-køge-køge-kommune-klimaxfestival' }, { case_id: 116, case_slug: 'lillebælt-nature-park' },
+            { case_id: 117, case_slug: 'skyclean-stiesdal-pyrolysis-project' }, { case_id: 118, case_slug: 'the-ramonville-saint-agne-agro-ecology-project' },
+            { case_id: 119, case_slug: 'aller-leine-valley' }, { case_id: 120, case_slug: 'developing-sanitation-solutions-in-accra' },
+            { case_id: 121, case_slug: 'a-collaborative-approach-to-rural-revitalization-in-hong-kong' }, { case_id: 122, case_slug: 'the-healthy-landscapes-project' },
+            { case_id: 123, case_slug: 'mangrove-conservation-community' }, { case_id: 124, case_slug: 'village-of-hope' },
+            { case_id: 125, case_slug: 'the-renewable-energy-community-of-cernusco-sul-naviglio' }, { case_id: 126, case_slug: 'the-renewable-energy-community-of-cernusco-sul-naviglio' }, // Note: 126 has same slug as 125 in data
+            { case_id: 127, case_slug: 'arboreal-crossing-tanjung-bungah-penang' }, { case_id: 128, case_slug: 'promoting-cluster-of-green-entrepreneurship-in-pokhara' },
+            { case_id: 129, case_slug: 'solarna-stara' }, { case_id: 130, case_slug: 'be-resilient-project-cape-winelands-biosphere-region' },
+            { case_id: 131, case_slug: 'dinkwayane-water-smart-project' }, { case_id: 132, case_slug: 'climate-neutral-karlstad-2030' },
+            { case_id: 133, case_slug: 'chiang-mai-project' }, { case_id: 134, case_slug: 'development-of-station-area-in-nijmegen-city' },
+            { case_id: 135, case_slug: 'landscape-governance-noord-brabant' }, { case_id: 136, case_slug: 'co-creation-of-sustainable-coffee-farming' }
+        ];
+
+        const gfList = [
+            { "factor_code": "GF01", "factor_layer_code": "C1", "factor_name": "Perceived importance of biosphere conditions" },
+            { "factor_code": "GF02", "factor_layer_code": "C2", "factor_name": "Formal national and international legislation programs and goals" },
+            { "factor_code": "GF03", "factor_layer_code": "C2", "factor_name": "Relative openness of public governance paradigms" },
+            { "factor_code": "GF04", "factor_layer_code": "C1", "factor_name": "Formalized institutional channels for citizen participation and community mobilization" },
+            { "factor_code": "GF05", "factor_layer_code": "C2", "factor_name": "Mechanism for ensuring top-down steering and bottom-up social accountability" },
+            { "factor_code": "GF06", "factor_layer_code": "C1", "factor_name": "Strategic agenda setting by means of translation" },
+            { "factor_code": "GF07", "factor_layer_code": "C1", "factor_name": "Construction of narratives about successful multi-actor collaboration" },
+            { "factor_code": "GF08", "factor_layer_code": "C3", "factor_name": "Building on or leveraging institutional platforms and arenas" },
+            { "factor_code": "GF09", "factor_layer_code": "C2", "factor_name": "Provision of access to blended financing" },
+            { "factor_code": "GF10", "factor_layer_code": "C2", "factor_name": "The ability to leverage support from authorities to enable local collaboration" },
+            { "factor_code": "GF11", "factor_layer_code": "C3", "factor_name": "Inclusion and empowerment of relevant and affected actors" },
+            { "factor_code": "GF12", "factor_layer_code": "C1", "factor_name": "Clarification of interdependence vis-à-vis the common problem and joint vision" },
+            { "factor_code": "GF13", "factor_layer_code": "C3", "factor_name": "Trust-building and conflict mediation" },
+            { "factor_code": "GF14", "factor_layer_code": "C3", "factor_name": "Use of experimental tools for innovation" },
+            { "factor_code": "GF15", "factor_layer_code": "C3", "factor_name": "Continuous critical self-reflection and learning (e.g. developmental evaluation)" },
+            { "factor_code": "GF16", "factor_layer_code": "C3", "factor_name": "Exercise of facilitating leadership" }
+        ];
+        
+        const layerInfo = {
+            'C1': { name: 'C1 - Contexto', color: 'rgb(34, 197, 94)' },
+            'C2': { name: 'C2 - Instituciones', color: 'rgb(59, 130, 246)' },
+            'C3': { name: 'C3 - Colaboración', color: 'rgb(239, 68, 68)' },
+        };
+        
+        const caseMap = new Map(casesData.map(c => [c.case_id, c.case_slug]));
+        const gfLayerMap = new Map(gfList.map(item => [item.factor_code, item.factor_layer_code]));
+        const factorNameMap = new Map(gfList.map(item => [item.factor_code, item.factor_name]));
+
+
+        const fullData = rawScores.map(d => {
+            const factorNumber = parseInt(d.gf_code.replace('GF', ''));
+            const formattedGfCode = `GF${String(factorNumber).padStart(2, '0')}`;
+            return {
+                ...d,
+                case_slug: caseMap.get(d.case_id) || 'N/A',
+                gf_code: formattedGfCode,
+                score: d.qca_score && d.qca_score.trim() !== '' ? parseFloat(d.qca_score) : null,
+                layer: gfLayerMap.get(formattedGfCode)
+            };
+        }).filter(d => d.score !== null && !isNaN(d.score) && d.layer);
+
+        // --- 2. Transformación para Plotly ---
+        const traces = Object.keys(layerInfo).map(layerCode => {
+            const layerData = fullData.filter(d => d.layer === layerCode);
+            return {
+                type: 'box',
+                name: layerInfo[layerCode].name,
+                x: layerData.map(d => d.gf_code),
+                y: layerData.map(d => d.score),
+                boxpoints: 'all',
+                jitter: 0.5,
+                pointpos: -1.8,
+                marker: { color: layerInfo[layerCode].color, size: 6 },
+                line: { color: layerInfo[layerCode].color }
+            };
+        });
+
+        // --- 3. Configuración del Gráfico (Layout) ---
+        const layout = {
+            title: { text: 'Distribución de QCA Scores por Factor de Gobernanza', font: { size: 20 } },
+            yaxis: { title: 'QCA Score', zeroline: false, range: [-0.1, 1.1], tickvals: [0, 0.33, 0.66, 1.0], gridcolor: 'rgba(0,0,0,0.05)' },
+            xaxis: { title: 'Factor de Gobernanza (GF Code)', categoryorder: 'array', categoryarray: [...Array(16)].map((_, i) => `GF${String(i + 1).padStart(2, '0')}`), gridcolor: 'rgba(0,0,0,0.05)' },
+            boxmode: 'group',
+            legend: { orientation: 'h', y: -0.2, x: 0.5, xanchor: 'center' },
+            margin: { l: 60, r: 30, b: 100, t: 80 },
+            paper_bgcolor: 'white',
+            plot_bgcolor: 'white',
+        };
+
+        // --- 4. Renderizado y Eventos ---
+        const plotDiv = document.getElementById('boxplot');
+        Plotly.newPlot(plotDiv, traces, layout, {responsive: true});
+
+        // --- Lógica del Modal ---
+        const modal = document.getElementById('caseModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const maxScoreTitle = document.getElementById('maxScoreTitle');
+        const minScoreTitle = document.getElementById('minScoreTitle');
+        const maxCasesList = document.getElementById('maxCasesList');
+        const minCasesList = document.getElementById('minCasesList');
+        
+        const openModal = () => {
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            setTimeout(() => {
+                modal.querySelector('.modal-backdrop').classList.remove('opacity-0');
+                modal.querySelector('.modal-content').classList.remove('scale-95');
+            }, 10);
+        };
+
+        const closeModal = () => {
+            modal.querySelector('.modal-backdrop').classList.add('opacity-0');
+            modal.querySelector('.modal-content').classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }, 300);
+        };
+
+        document.getElementById('closeModal').addEventListener('click', closeModal);
+        document.getElementById('modalBackdrop').addEventListener('click', closeModal);
+
+        plotDiv.on('plotly_click', function(data) {
+            const point = data.points[0];
+            const gfCode = point.x;
+            const factorName = factorNameMap.get(gfCode) || 'Nombre no encontrado';
+
+            const casesForGf = fullData.filter(d => d.gf_code === gfCode);
+            if (casesForGf.length === 0) return;
+
+            const scores = casesForGf.map(d => d.score);
+            const maxScore = Math.max(...scores);
+            const minScore = Math.min(...scores);
+
+            const maxCases = casesForGf.filter(d => d.score === maxScore);
+            const minCases = casesForGf.filter(d => d.score === minScore);
+
+            // Poblar y mostrar el modal
+            modalTitle.innerHTML = `${gfCode} <span class="text-base font-normal text-gray-500">- ${factorName}</span>`;
+            maxScoreTitle.textContent = `Casos con Score Máximo (${maxScore.toFixed(2)})`;
+            minScoreTitle.textContent = `Casos con Score Mínimo (${minScore.toFixed(2)})`;
+            
+            maxCasesList.innerHTML = maxCases.map(c => `<li>${c.case_id} - ${c.case_slug}</li>`).join('');
+            minCasesList.innerHTML = minCases.map(c => `<li>${c.case_id} - ${c.case_slug}</li>`).join('');
+
+            openModal();
+        });
+
+    </script>
+</body>
+</html>
+
