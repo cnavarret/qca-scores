@@ -1,4 +1,5 @@
-# Visualización Interactiva de QCA Scores por Factor de Gobernanza
+# **Visualización Interactiva de QCA Scores por Factor de Gobernanza**
+
 ## Resumen
 Este documento describe el gráfico de bigotes interactivo (qca_scores_boxplot.html) que visualiza la distribución de las puntuaciones de Análisis Cualitativo Comparativo (QCA) para 36 casos de estudio, organizados por los 16 factores de gobernanza del proyecto GoGreen.
 Descripción del Gráfico
@@ -25,7 +26,7 @@ El procesamiento de los datos, así como el diseño y la implementación de esta
 * ORCID: https://orcid.org/0000-0001-5528-0562
 
 
-# C1. Condiciones de Contexto y Coordinación
+# **C1. Condiciones de Contexto y Coordinación**
 
 El *Layer C1* agrupa los **factores estructurales, estratégicos y táctico-operativos** que configuran el **contexto de acción colectiva** en el cual emergen, se sostienen y evolucionan los procesos de gobernanza colaborativa para las transiciones verdes.
 Este layer no mide la colaboración en sí misma, sino las **condiciones que la posibilitan o limitan**, incluyendo la base ecológica, las reglas institucionales, los marcos discursivos estratégicos y los mecanismos de interdependencia operativa.
@@ -62,11 +63,9 @@ El **Layer C1** puede entenderse como el **sustrato de la gobernanza colaborativ
 En conjunto, este layer captura **el grado de alineación entre las condiciones materiales, institucionales, simbólicas y relacionales** que sostienen la posibilidad de la colaboración.
 
 ---
-
-Perfecto. A partir de la tabla del **Layer C2**, y siguiendo exactamente el mismo tono, estructura y nivel analítico que el desarrollado para el **Layer C1**, la propuesta queda así:
-
-
-# *Layer* C2. Institucionalización y Apalancamiento Multinivel
+------------
+                  
+# **Layer C2. Institucionalización y Apalancamiento Multinivel**
 
 El **Layer C2** agrupa los **factores institucionales y de recursos** que estructuran la **capacidad de acción multinivel** de los procesos de gobernanza colaborativa. Este nivel refleja cómo las **reglas formales, paradigmas de gestión pública, mecanismos de rendición de cuentas y sistemas de apoyo financiero e intergubernamental** configuran el entorno de gobernanza donde se insertan los proyectos de transición verde.
 
@@ -82,7 +81,7 @@ Mientras el *Layer C1* aborda las condiciones de contexto y coordinación, el *L
 
 ---
 
-## 🧠 Interpretación analítica según escala
+## Interpretación analítica según escala
 
 | Escala          | Foco analítico                                      | Naturaleza de las relaciones                                                                                           | Función dentro de la gobernanza colaborativa                                                                     |
 | --------------- | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |

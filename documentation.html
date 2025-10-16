@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documentación del Proyecto</title>
+    <!-- Tailwind CSS para estilos -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Librería marked.js para renderizar Markdown -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        /* Estilos CSS estándar que replican las utilidades de Tailwind. Esto funciona con el script CDN. */
+        .markdown-body h1 {
+            font-size: 2.25rem; /* text-4xl */
+            font-weight: 800; /* font-extrabold */
+            border-bottom: 2px solid #e5e7eb; /* border-b-2 border-gray-200 */
+            padding-bottom: 1rem; /* pb-4 */
+            margin-bottom: 2rem; /* mb-8 */
+        }
+        .markdown-body h2 {
+            font-size: 1.875rem; /* text-3xl */
+            font-weight: 700; /* font-bold */
+            border-bottom: 1px solid #e5e7eb; /* border-b border-gray-200 */
+            padding-bottom: 0.75rem; /* pb-3 */
+            margin-bottom: 1.5rem; /* mb-6 */
+            margin-top: 3rem; /* mt-12 */
+        }
+        .markdown-body h3 {
+            font-size: 1.5rem; /* text-2xl */
+            font-weight: 600; /* font-semibold */
+            margin-bottom: 1rem; /* mb-4 */
+            margin-top: 2rem; /* mt-8 */
+        }
+        .markdown-body p {
+            margin-bottom: 1.25rem; /* mb-5 */
+            line-height: 1.625; /* leading-relaxed */
+        }
+        .markdown-body ul, .markdown-body ol {
+            margin-bottom: 1.25rem; /* mb-5 */
+            padding-left: 1.25rem; /* pl-5 */
+            list-style: inside disc;
+        }
+        .markdown-body ul li, .markdown-body ol li {
+            margin-bottom: 0.5rem; /* space-y-2 */
+        }
+        .markdown-body a {
+            color: #2563eb; /* text-blue-600 */
+            font-weight: 500; /* font-medium */
+            text-decoration: none;
+        }
+        .markdown-body a:hover {
+            text-decoration: underline;
+        }
+        .markdown-body code {
+            background-color: #f3f4f6; /* bg-gray-100 */
+            color: #dc2626; /* text-red-600 */
+            font-family: monospace;
+            font-size: 0.875rem; /* text-sm */
+            border-radius: 0.25rem; /* rounded */
+            padding: 0.125rem 0.375rem;
+        }
+        .markdown-body pre {
+            background-color: #1f2937; /* bg-gray-800 */
+            color: white;
+            padding: 1rem;
+            border-radius: 0.5rem; /* rounded-lg */
+            overflow-x: auto;
+            margin-bottom: 1.5rem; /* mb-6 */
+        }
+         .markdown-body pre code {
+            background-color: transparent;
+            color: white;
+            padding: 0;
+        }
+        .markdown-body table {
+            width: 100%;
+            border-collapse: collapse;
+            display: block;
+            overflow-x: auto;
+        }
+        .markdown-body thead {
+             background-color: #f3f4f6; /* bg-gray-100 */
+        }
+        .markdown-body th, .markdown-body td {
+            border: 1px solid #d1d5db; /* border-gray-300 */
+            padding: 0.5rem 1rem;
+            text-align: left;
+        }
+        .markdown-body th {
+            font-weight: 600; /* font-semibold */
+        }
+        .markdown-body tr:nth-child(even) {
+            background-color: #f9fafb; /* bg-gray-50 */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        <div class="max-w-4xl mx-auto bg-white p-8 sm:p-10 rounded-xl shadow-lg">
+            <div id="markdown-content" class="markdown-body">
+                <!-- El contenido del README.md se insertará aquí -->
+                <p class="text-gray-500">Cargando documentación...</p>
+            </div>
+             <div class="mt-10 pt-6 border-t border-gray-200 text-center">
+                <a href="qca_scores_boxplot.html" class="text-blue-600 hover:underline font-medium">&larr; Volver al Gráfico Interactivo</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Función para cargar y renderizar el archivo README.md
+        async function loadReadme() {
+            const contentDiv = document.getElementById('markdown-content');
+            try {
+                // Se construye la URL completa para 'README.md' para evitar problemas con las URL de tipo blob
+                const readmeUrl = new URL('README.md', window.location.href).href;
+                const response = await fetch(readmeUrl);
+                
+                if (!response.ok) {
+                    throw new Error(`Error al cargar el archivo: ${response.statusText}`);
+                }
+                const markdownText = await response.text();
+                
+                // Usamos la librería marked para convertir Markdown a HTML
+                const htmlContent = marked.parse(markdownText);
+                
+                // Insertamos el HTML renderizado en la página
+                contentDiv.innerHTML = htmlContent;
+            } catch (error) {
+                console.error('No se pudo cargar el README.md:', error);
+                contentDiv.innerHTML = `<p class="text-red-600 font-bold">Error: No se pudo cargar la documentación.</p><p>Asegúrate de que el archivo 'README.md' se encuentra en el mismo directorio.</p>`;
+            }
+        }
+        
+        // Llamamos a la función cuando la página se carga
+        window.onload = loadReadme;
+    </script>
+
+</body>
+</html>
