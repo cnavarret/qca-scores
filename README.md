@@ -142,5 +142,69 @@ El **Layer C3** representa el **plano relacional y adaptativo** de la gobernanza
 
 En conjunto, el layer C3 traduce la **gobernanza colaborativa en acción**, integrando **capacidades organizativas, cognitivas y emocionales** para mantener procesos de transición verde sostenibles en el tiempo. Es el nivel donde la colaboración deja de ser un ideal normativo y se convierte en **una práctica institucionalizada de aprendizaje colectivo y acción transformadora**.
 
+---
 
+## 📊 Tabla Comparativa de QCA Scores por Factor de Gobernanza (GF)
 
+| **Factor** | **101** | **102** | **103** | **104** | **105** | **106** | **107** | **108** | **109** | **110** | **111** | **112** | **113** | **114** | **115** | **116** | **117** | **118** | **119** | **120** | **121** | **122** | **123** | **124** | **125** | **126** | **127** | **128** | **129** | **130** | **131** | **132** | **133** | **134** | **135** | **136** |
+| :--------- | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: | :-----: |
+| **GF01**   |   0.66  |    1    |    1    |   0.66  |   0.66  |    1    |    1    |    1    |   0.66  |    1    |    1    |    1    |    1    |   0.66  |   0.66  |    1    |    1    |    1    |   0.66  |   0.66  |   0.66  |    1    |    1    |    1    |   0.66  |    1    |    1    |    1    |    1    |    1    |    1    |    1    |   0.66  |    1    |    1    |         |
+| **GF02**   |   0.66  |    1    |   0.66  |   0.66  |   0.66  |   0.33  |   0.66  |    1    |   0.33  |    1    |    1    |   0.66  |    1    |    1    |    1    |    1    |    1    |   0.66  |   0.66  |   0.33  |   0.33  |    1    |    1    |    0    |    1    |    1    |    1    |   0.66  |   0.66  |    1    |   0.33  |   0.33  |   0.66  |   0.66  |   0.33  |    1    |
+| **GF03**   |   0.33  |    1    |    1    |    1    |    1    |   0.66  |    1    |   0.66  |    1    |    1    |    1    |   0.33  |    1    |   0.66  |    1    |    1    |    1    |   0.33  |   0.33  |   0.33  |   0.33  |   0.66  |    1    |    0    |    1    |   0.66  |   0.66  |   0.33  |   0.33  |   0.33  |   0.66  |   0.33  |    1    |   0.66  |   0.66  |         |
+| **GF04**   |   0.33  |    1    |    1    |    1    |    1    |   0.66  |    1    |    1    |    1    |    1    |   0.66  |   0.66  |    1    |   0.66  |    1    |   0.66  |    1    |   0.33  |   0.33  |    0    |   0.33  |   0.66  |    1    |   0.33  |   0.66  |   0.66  |   0.66  |   0.33  |    1    |    1    |   0.66  |   0.33  |   0.66  |    1    |   0.66  |    1    |
+| **GF05**   |   0.33  |    1    |    1    |    1    |   0.33  |   0.66  |   0.33  |   0.66  |   0.33  |   0.66  |   0.33  |   0.66  |   0.66  |    1    |   0.66  |    1    |   0.66  |   0.33  |   0.66  |   0.66  |    1    |   0.33  |    1    |   0.66  |   0.33  |   0.66  |   0.66  |   0.66  |   0.33  |   0.66  |    1    |   0.66  |   0.66  |   0.66  |   0.33  |   0.66  |
+| **GF06**   |   0.66  |   0.33  |   0.33  |   0.33  |   0.33  |    0    |    0    |    1    |   0.33  |   0.66  |   0.33  |   0.66  |   0.33  |   0.66  |   0.33  |    1    |    0    |    0    |   0.33  |    1    |   0.33  |   0.66  |    0    |    1    |   0.33  |   0.66  |   0.66  |   0.66  |   0.33  |   0.66  |    1    |   0.33  |   0.66  |   0.33  |   0.33  |   0.33  |
+| **GF07**   |    1    |    1    |   0.66  |    1    |   0.33  |    1    |    1    |    1    |    1    |    1    |   0.66  |    1    |   0.33  |    1    |   0.66  |    1    |    1    |   0.33  |   0.66  |   0.33  |    1    |   0.33  |    1    |    0    |    0    |    1    |    1    |   0.66  |    1    |    1    |   0.66  |   0.33  |    1    |   0.66  |   0.33  |   0.66  |
+| **GF08**   |    1    |    1    |    1    |   0.66  |   0.33  |   0.33  |    1    |   0.66  |    1    |    1    |   0.66  |    1    |   0.66  |    1    |    1    |    1    |    1    |   0.33  |   0.66  |   0.66  |    1    |   0.66  |   0.66  |   0.33  |   0.33  |    1    |    1    |   0.33  |   0.66  |    1    |    1    |   0.33  |    1    |   0.66  |   0.66  |    1    |
+| **GF09**   |   0.33  |    1    |   0.33  |    0    |    1    |    1    |   0.66  |    1    |    0    |    0    |    1    |    0    |    1    |    1    |    0    |    1    |    1    |   0.66  |    1    |   0.66  |    0    |   0.66  |    1    |    1    |   0.66  |   0.33  |    1    |    0    |   0.33  |    0    |   0.33  |    1    |    1    |   0.66  |    0    |    1    |
+| **GF10**   |   0.33  |   0.33  |   0.66  |   0.66  |    1    |   0.66  |   0.66  |   0.66  |    1    |   0.66  |   0.33  |   0.33  |   0.33  |    0    |    1    |   0.33  |    1    |    1    |   0.66  |    1    |    1    |   0.66  |   0.33  |    1    |   0.66  |   0.66  |    1    |   0.66  |   0.66  |    1    |   0.66  |   0.66  |    1    |    1    |    1    |   0.66  |
+| **GF11**   |   0.66  |    1    |    1    |   0.33  |   0.33  |    1    |   0.33  |    1    |   0.66  |   0.66  |   0.33  |   0.33  |   0.66  |   0.33  |   0.66  |    1    |   0.33  |    0    |   0.33  |   0.66  |    1    |   0.33  |    1    |    1    |   0.33  |    1    |    1    |   0.66  |    1    |   0.33  |    1    |   0.66  |    1    |    1    |    1    |    1    |
+| **GF12**   |   0.66  |    1    |    1    |    1    |    1    |    1    |    1    |   0.66  |   0.66  |   0.66  |    1    |   0.33  |    1    |   0.33  |    1    |    1    |    1    |    1    |   0.66  |    1    |    1    |   0.33  |    1    |    1    |    1    |    1    |    1    |    1    |    1    |    1    |    1    |   0.33  |    1    |   0.66  |   0.33  |    1    |
+| **GF13**   |   0.33  |    1    |    1    |   0.66  |   0.66  |   0.66  |    1    |    1    |   0.33  |   0.66  |   0.66  |   0.66  |    1    |   0.66  |    1    |    1    |   0.33  |   0.33  |   0.66  |    1    |   0.66  |   0.33  |   0.33  |   0.66  |   0.33  |    1    |   0.33  |   0.66  |    1    |    1    |   0.66  |   0.33  |    1    |   0.33  |   0.66  |         |
+| **GF14**   |    1    |   0.66  |    1    |   0.66  |    1    |    1    |   0.33  |    1    |    1    |    1    |    1    |    0    |    0    |   0.33  |    1    |    1    |    1    |    1    |   0.66  |    0    |   0.66  |    0    |    1    |    0    |    1    |    0    |    1    |    0    |   0.33  |    1    |   0.66  |    1    |    1    |   0.66  |    0    |    1    |
+| **GF15**   |   0.66  |    1    |    1    |    1    |   0.33  |   0.66  |   0.66  |    1    |   0.33  |   0.33  |   0.66  |    1    |   0.33  |    0    |    1    |    1    |    1    |    0    |   0.66  |    1    |   0.66  |    1    |    1    |   0.66  |   0.66  |    1    |    1    |   0.33  |    1    |   0.33  |    1    |   0.66  |   0.33  |   0.33  |   0.33  |    1    |
+| **GF16**   |    1    |    1    |    1    |    1    |   0.66  |    1    |    1    |    1    |    1    |    0    |    1    |    1    |    1    |   0.33  |    1    |    1    |   0.66  |    1    |    1    |    1    |    1    |   0.66  |    1    |    1    |   0.66  |    1    |    1    |   0.66  |    1    |    1    |    1    |    1    |    1    |    1    |   0.33  |    1    |
+
+**Fuente:** elaboración propia a partir de los 36 *Case Reports* del proyecto **[GoGreen](https://gogreen-project.com/publications/)**
+
+## 📊 Tabla Relación de casos ordenados por ID
+
+| ID del Caso | Nombre del Caso | País |
+| :--- | :--- | :--- |
+| 101 | Arena Breivoll, Norway | Norway |
+| 102 | Ant Forest Protected Area Project | China |
+| 103 | Roskilde Craftsman Dormitory | Denmark |
+| 104 | Circular Green Blocks | Finland |
+| 105 | Ejido Solar | Mexico |
+| 106 | Sonoma County Winegrowers Electrification Project | USA |
+| 107 | Goulburn-Murray Resilience Taskforce | Australia |
+| 108 | The Mymizu Project | Japan |
+| 109 | Mixed professionals of the primary sector (MPPS) in Gipuzkoa | Spain |
+| 110 | Developing Sustainable Urban and Periurban Agriculture in São Paulo | Brazil |
+| 111 | The Marin Carbon Project | USA |
+| 112 | Climate Action London | USA |
+| 113 | Energy Community Avedøre | Denmark |
+| 114 | Holistic Land Use Sporring | Denmark |
+| 115 | denmark Køge Køge Kommune KLIMAXfestival | Denmark |
+| 116 | Lillebælt Nature Park | Denmark |
+| 117 | Skyclean Stiesdal Pyrolysis Project | Denmark |
+| 118 | The Ramonville-Saint-Agne Agro-Ecology Project | France |
+| 119 | Aller-Leine-Valley | Germany |
+| 120 | Developing Sanitation Solutions in Accra | Ghana |
+| 121 | A collaborative approach to rural revitalization in Hong Kong | Hong Kong |
+| 122 | The Healthy Landscapes Project | Sri Lanka |
+| 123 | Mangrove Conservation Community | Indonesia |
+| 124 | Village of Hope | Iran |
+| 125 | The Renewable Energy Community of Cernusco sul Naviglio | Italy |
+| 126 | The Daw Project | Jordan |
+| 127 | Arboreal Crossing Tanjung Bungah Penang | Malaysia |
+| 128 | Promoting Cluster of Green Entrepreneurship in Pokhara | Nepal |
+| 129 | Solarna Stara | Serbia |
+| 130 | Be Resilient Project Cape Winelands Biosphere Region | South Africa |
+| 131 | Dinkwayane Water Smart Project | South Africa |
+| 132 | Climate Neutral Karlstad 2030 | Sweden |
+| 133 | Chiang Mai Project | Thailand |
+| 134 | Development of Station Area in Nijmegen city | The Netherlands |
+| 135 | Landscape Governance Noord-Brabant | The Netherlands |
+| 136 | Co-Creation of Sustainable Coffee Farming | Vietnam |
+**Fuente:** elaboración propia
